@@ -16,6 +16,9 @@ def run_harvester(creep):
     :param creep: The creep to run
     """
 
+    creep.memory.role = 'Harvester'
+    #print('{} assigned to harvest'.format(creep.name))
+
     # If we're full, stop filling up and remove the saved source
     if creep.memory.filling and _.sum(creep.carry) >= creep.carryCapacity:
         creep.memory.filling = False
