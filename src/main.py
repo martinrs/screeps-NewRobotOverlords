@@ -16,34 +16,57 @@ __pragma__('noalias', 'set')
 __pragma__('noalias', 'type')
 __pragma__('noalias', 'update')
 
+def updateHarvesterDistribution(room):
+    distribution = {}
+
+    for source in room.find(FIND_SOURCES):
+        if not source.id in distribution:
+            distribution[source.id] = 0
+        for creep in Object.keys(Game.creeps):
+            if creep.pos.room == room and creep.memory.target == source.id:
+                distribution[source.id] += 1
+    print(distribution)
+    return distribution
 
 def main():
     """
     Main game logic loop.
     """
 
-    # Strategic planning section
-    desiredBuilders = 1
+############ Strategic planning section
+    desiredBuilders = 2
 
     # Report to console
     actualHarvesters = _.sum(Game.creeps, lambda h: h.memory.role == 'Harvester')
     actualBuilders = _.sum(Game.creeps, lambda b: b.memory.role == 'Builder')
     print('{} creeps\t{}/{} builders\t{} harvesters'.format(len(Game.creeps), actualBuilders,desiredBuilders, actualHarvesters))
 
-    # Run each creep
+    #harvesterDistribution = updateHarvesterDistribution(Game.creeps[0].pos.room)
+
+########### Creep iteration
     for name in Object.keys(Game.creeps):
-        creep = Game.creeps[name]
-
-        if creep.memory.role == 'Builder' and actualBuilders <= desiredBuilders:
-            builder.run_builder(creep)
-        elif creep.memory.role == 'Harvester':
-            harvester.run_harvester(creep)
-        elif actualBuilders <= desiredBuilders:
-            builder.run_builder(creep)
+########### Creep memory management
+        # Clear dead ones
+        if not Game.creeps[name]:
+            del Memory.creeps[name]
         else:
-            harvester.run_harvester(creep)
 
-    # Run each spawn
+########### Work allocation
+            creep = Game.creeps[name]
+
+            if creep.memory.role == 'Builder' or actualBuilders < desiredBuilders:
+                #builder.run_builder(creep, harvesterDistribution)
+                builder.run_builder(creep)
+                #harvesterDistribution = updateHarvesterDistribution()
+                actualBuilders += 1
+            elif creep.memory.role == 'Harvester':
+                harvester.run_harvester(creep)
+            elif actualBuilders <= desiredBuilders:
+                builder.run_builder(creep)
+            else:
+                harvester.run_harvester(creep)
+
+########### Spawn instructions
     for name in Object.keys(Game.spawns):
         spawn = Game.spawns[name]
         if not spawn.spawning:
