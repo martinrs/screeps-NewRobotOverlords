@@ -1,4 +1,4 @@
-import harvester, builder
+import harvester, builder, wall_e
 # defs is a package which claims to export all constants and some JavaScript objects, but in reality does
 #  nothing. This is useful mainly when using an editor like PyCharm, so that it 'knows' that things like Object, Creep,
 #  Game, etc. do exist.
@@ -35,11 +35,13 @@ def main():
 
 ############ Strategic planning section
     desiredBuilders = 3
+    desiredWallEs = 1
 
     # Report to console
     actualHarvesters = _.sum(Game.creeps, lambda h: h.memory.role == 'Harvester')
     actualBuilders = _.sum(Game.creeps, lambda b: b.memory.role == 'Builder')
-    print('{} creeps\t{}/{} builders\t{} harvesters'.format(len(Game.creeps), actualBuilders,desiredBuilders, actualHarvesters))
+    actualWallEs = _.sum(Game.creeps, lambda b: b.memory.role == 'Wall-E')
+    print('{} Creeps\t{}/{} Builders\t{}\t{] Wall-Es Harvesters'.format(len(Game.creeps), actualBuilders,desiredBuilders, actualWallEs, actualHarvesters))
 
     #harvesterDistribution = updateHarvesterDistribution(Game.creeps[0].pos.room)
 
@@ -59,10 +61,10 @@ def main():
             builder.run_builder(creep)
             #harvesterDistribution = updateHarvesterDistribution()
             actualBuilders += 1
+        elif creep.memory.role == 'Wall-E' or actualWallEs < desiredWallEs:
+            wall_e.run_wall_e(creep)
         elif creep.memory.role == 'Harvester':
             harvester.run_harvester(creep)
-        elif actualBuilders <= desiredBuilders:
-            builder.run_builder(creep)
         else:
             harvester.run_harvester(creep)
 
