@@ -41,7 +41,7 @@ def main():
     actualHarvesters = _.sum(Game.creeps, lambda h: h.memory.role == 'Harvester')
     actualBuilders = _.sum(Game.creeps, lambda b: b.memory.role == 'Builder')
     actualWallEs = _.sum(Game.creeps, lambda b: b.memory.role == 'Wall-E')
-    print('{} Creeps\t{}/{} Builders\t{}\t{} Wall-Es Harvesters'.format(len(Game.creeps), actualBuilders,desiredBuilders, actualWallEs, actualHarvesters))
+    print('{} Creeps\t{}/{} Builders\t{} Wall-Es\t{} Harvesters'.format(len(Game.creeps), actualBuilders,desiredBuilders, actualWallEs, actualHarvesters))
 
     #harvesterDistribution = updateHarvesterDistribution(Game.creeps[0].pos.room)
 
