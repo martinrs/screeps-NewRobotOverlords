@@ -14,7 +14,7 @@ def run_builder(creep):
     creep.memory.role = 'Builder'
     #print('Builder {} assigned to {}'.format(creep.name, creep.memory.state))
 
-    if creep.memory.state != 'Building' and creep.memory.state != 'Harvesting':
+    if creep.memory.state == 'Depositing':
         creep.memory.state = 'Building'
 
     if creep.memory.state == 'Harvesting':

@@ -11,8 +11,7 @@ __pragma__('noalias', 'update')
 
 def harvestEnergy(creep):
     #def harvestEnergy(creep, distribution):
-    creep.memory.state = 'Harvesting'
-
+    
     # If we're full, stop filling up and remove the saved source
     if creep.memory.state == 'Harvesting' and _.sum(creep.carry) >= creep.carryCapacity:
         creep.memory.state = 'Depositing'
