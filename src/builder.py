@@ -33,8 +33,8 @@ def run_builder(creep):
             if result == ERR_NOT_ENOUGH_RESOURCES:
                 creep.memory.state = 'Harvesting'
             elif result != OK:
-                del creep.memory.target
                 creep.memory.state = 'Harvesting'
+                del creep.memory.target
         else:
             creep.moveTo(target)
     else:
