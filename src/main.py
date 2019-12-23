@@ -43,28 +43,28 @@ def main():
 
     #harvesterDistribution = updateHarvesterDistribution(Game.creeps[0].pos.room)
 
-########### Creep iteration
-    for name in Object.keys(Game.creeps):
 ########### Creep memory management
-        # Clear dead ones
+    # Clear dead ones
+    for name in Object.keys(Memory.creeps):
         if not Game.creeps[name]:
             del Memory.creeps[name]
-        else:
 
+########### Creep iteration
+    for name in Object.keys(Game.creeps):
 ########### Work allocation
-            creep = Game.creeps[name]
+        creep = Game.creeps[name]
 
-            if creep.memory.role == 'Builder' or actualBuilders < desiredBuilders:
-                #builder.run_builder(creep, harvesterDistribution)
-                builder.run_builder(creep)
-                #harvesterDistribution = updateHarvesterDistribution()
-                actualBuilders += 1
-            elif creep.memory.role == 'Harvester':
-                harvester.run_harvester(creep)
-            elif actualBuilders <= desiredBuilders:
-                builder.run_builder(creep)
-            else:
-                harvester.run_harvester(creep)
+        if creep.memory.role == 'Builder' or actualBuilders < desiredBuilders:
+            #builder.run_builder(creep, harvesterDistribution)
+            builder.run_builder(creep)
+            #harvesterDistribution = updateHarvesterDistribution()
+            actualBuilders += 1
+        elif creep.memory.role == 'Harvester':
+            harvester.run_harvester(creep)
+        elif actualBuilders <= desiredBuilders:
+            builder.run_builder(creep)
+        else:
+            harvester.run_harvester(creep)
 
 ########### Spawn instructions
     for name in Object.keys(Game.spawns):
@@ -83,6 +83,5 @@ def main():
                     spawn.createCreep([WORK, CARRY, CARRY, MOVE, MOVE, MOVE])
                 else:
                     spawn.createCreep([WORK, CARRY, MOVE, MOVE])
-
 
 module.exports.loop = main
