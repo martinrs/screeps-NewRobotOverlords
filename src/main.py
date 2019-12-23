@@ -34,7 +34,7 @@ def main():
     """
 
 ############ Strategic planning section
-    desiredBuilders = 2
+    desiredBuilders = 3
 
     # Report to console
     actualHarvesters = _.sum(Game.creeps, lambda h: h.memory.role == 'Harvester')

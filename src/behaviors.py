@@ -35,7 +35,6 @@ def harvestEnergy(creep):
             creep.memory.source = source.id"""
         creep.memory.source = source.id
 
-        print(creep.memory.source)
         # If we're near the source, harvest it - otherwise, move to it.
         if creep.pos.isNearTo(source):
             result = creep.harvest(source)
@@ -43,7 +42,6 @@ def harvestEnergy(creep):
                 print("[{}] Unknown result from creep.harvest({}): {}".format(creep.name, source, result))
         else:
             creep.moveTo(source)
-            print('moving')
 
 def depositEnergy(creep, target):
     creep.memory.state = 'Depositing'
@@ -59,6 +57,7 @@ def depositEnergy(creep, target):
             result = creep.transfer(target, RESOURCE_ENERGY)
             if result == OK or result == ERR_FULL:
                 del creep.memory.target
+                creep.memory.state = 'Harvesting'
             else:
                 print("[{}] Unknown result from creep.transfer({}, {}): {}".format(
                     creep.name, target, RESOURCE_ENERGY, result))
@@ -67,6 +66,7 @@ def depositEnergy(creep, target):
             if result != OK:
                 print("[{}] Unknown result from creep.upgradeController({}): {}".format(
                     creep.name, target, result))
+                creep.memory.state = 'Harvesting'
             # Let the creeps get a little bit closer than required to the controller, to make room for other creeps.
             if not creep.pos.inRangeTo(target, 2):
                 creep.moveTo(target)

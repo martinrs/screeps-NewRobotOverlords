@@ -1,5 +1,5 @@
 from defs import *
-import harvester
+import behaviors
 
 __pragma__('noalias', 'name')
 __pragma__('noalias', 'undefined')
@@ -10,26 +10,32 @@ __pragma__('noalias', 'set')
 __pragma__('noalias', 'type')
 __pragma__('noalias', 'update')
 
-
 def run_builder(creep):
     creep.memory.role = 'Builder'
-    #print('{} assigned to build'.format(creep.name))
-    if creep.memory.state == 'Depositing':
+    #print('Builder {} assigned to {}'.format(creep.name, creep.memory.state))
+
+    if creep.memory.state != 'Building' and creep.memory.state != 'Harvesting':
         creep.memory.state = 'Building'
 
     if creep.memory.state == 'Harvesting':
         behaviors.harvestEnergy(creep)
-    else:
+    elif creep.memory.state == 'Building':
+        # Select target
         if creep.memory.target:
             target = Game.getObjectById(creep.memory.target)
         else:
             target = _.sample(creep.room.find(FIND_MY_CONSTRUCTION_SITES))
             creep.memory.target = target.id
 
-        if creep.memory.target:
-            if creep.pos.isNearTo(target):
-                result = creep.build(target)
-                if result != OK:
-                    del creep.memory.target
-            else:
-                creep.moveTo(target)
+        # Build or move closer
+        if creep.pos.isNearTo(target):
+            result = creep.build(target)
+            if result == ERR_NOT_ENOUGH_RESOURCES:
+                creep.memory.state = 'Harvesting'
+            elif result != OK:
+                del creep.memory.target
+                creep.memory.state = 'Harvesting'
+        else:
+            creep.moveTo(target)
+    else:
+        creep.memory.state = 'Building'
