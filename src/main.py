@@ -16,6 +16,8 @@ __pragma__('noalias', 'set')
 __pragma__('noalias', 'type')
 __pragma__('noalias', 'update')
 
+actualHarvesters, actualBuilders, actualWallEs = 0
+
 def updateHarvesterDistribution(room):
     distribution = {}
 
@@ -28,22 +30,24 @@ def updateHarvesterDistribution(room):
     print(distribution)
     return distribution
 
+def countStuff():
+    actualHarvesters = _.sum(Game.creeps, lambda h: h.memory.role == 'Harvester')
+    actualBuilders = _.sum(Game.creeps, lambda b: b.memory.role == 'Builder')
+    actualWallEs = _.sum(Game.creeps, lambda b: b.memory.role == 'Wall-E')
+
+    #harvesterDistribution = updateHarvesterDistribution(Game.creeps[0].pos.room)
+
 def main():
     """
     Main game logic loop.
     """
-
+    countStuff()
 ############ Strategic planning section
     desiredBuilders = 3
-    desiredWallEs = 1
+    desiredWallEs = 0
 
-    # Report to console
-    actualHarvesters = _.sum(Game.creeps, lambda h: h.memory.role == 'Harvester')
-    actualBuilders = _.sum(Game.creeps, lambda b: b.memory.role == 'Builder')
-    actualWallEs = _.sum(Game.creeps, lambda b: b.memory.role == 'Wall-E')
-    print('{} Creeps\t{}/{} Builders\t{} Wall-Es\t{} Harvesters'.format(len(Game.creeps), actualBuilders,desiredBuilders, actualWallEs, actualHarvesters))
+############ Report to console
 
-    #harvesterDistribution = updateHarvesterDistribution(Game.creeps[0].pos.room)
 
 ########### Creep memory management
     # Clear dead ones
@@ -63,10 +67,17 @@ def main():
             actualBuilders += 1
         elif creep.memory.role == 'Wall-E' or actualWallEs < desiredWallEs:
             wall_e.run_wall_e(creep)
+            actualWallEs += 1
         elif creep.memory.role == 'Harvester':
             harvester.run_harvester(creep)
         else:
             harvester.run_harvester(creep)
+
+############ Report to console
+    actualHarvesters = _.sum(Game.creeps, lambda h: h.memory.role == 'Harvester')
+    actualBuilders = _.sum(Game.creeps, lambda b: b.memory.role == 'Builder')
+    actualWallEs = _.sum(Game.creeps, lambda b: b.memory.role == 'Wall-E')
+    print('{} Creeps\t{}/{} Builders\t{} Wall-Es\t{} Harvesters'.format(len(Game.creeps), actualBuilders,desiredBuilders, actualWallEs, actualHarvesters))
 
 ########### Spawn instructions
     for name in Object.keys(Game.spawns):
