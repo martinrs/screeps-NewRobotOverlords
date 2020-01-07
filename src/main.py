@@ -18,7 +18,7 @@ __pragma__('noalias', 'update')
 
 actualHarvesters, actualBuilders, actualWallEs = 0
 
-def updateHarvesterDistribution(room):
+def countHarvesterDistribution(room):
     distribution = {}
 
     for source in room.find(FIND_SOURCES):
@@ -36,17 +36,14 @@ def countStuff():
     actualBuilders = _.sum(Game.creeps, lambda b: b.memory.role == 'Builder')
     actualWallEs = _.sum(Game.creeps, lambda b: b.memory.role == 'Wall-E')
 
-    #harvesterDistribution = updateHarvesterDistribution(Game.creeps[0].pos.room)
+    #harvesterDistribution = countHarvesterDistribution(Game.creeps[0].pos.room)
 
 def main():
     global actualHarvesters, actualBuilders, actualWallEs
     countStuff()
 ############ Strategic planning section
-    desiredBuilders = 3
+    desiredBuilders = 5
     desiredWallEs = 0
-
-############ Report to console
-
 
 ########### Creep memory management
     # Clear dead ones
@@ -55,11 +52,12 @@ def main():
             del Memory.creeps[name]
 
 ########### Work allocation
-    for name in Object.keys(Game.creeps):
+    for name in Object.keys(Game.creeps).reverse():
         creep = Game.creeps[name]
 
-        if actualBuilders < desiredBuilders:
+        if creep.memory.role == 'Builder' or actualBuilders < desiredBuilders:
             #builder.run_builder(creep, harvesterDistribution)
+            creep.memory.target = ''
             builder.run_builder(creep)
             #harvesterDistribution = updateHarvesterDistribution()
         elif actualWallEs < desiredWallEs:

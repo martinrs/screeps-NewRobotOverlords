@@ -21,7 +21,7 @@ transcrypt_clean_args = transcrypt_arguments + ['-b']
 def possible_transcrypt_binary_paths(config):
     """
     Finds all different places to look for a `transcrypt` binary to run.
-
+b
     :type config: Configuration
     """
     return [
