@@ -10,6 +10,12 @@ __pragma__('noalias', 'set')
 __pragma__('noalias', 'type')
 __pragma__('noalias', 'update')
 
+def hasValidConstructionTarget(creep):
+    for site in creep.room.find(FIND_MY_CONSTRUCTION_SITES):
+        if site.id == creep.memory.constructing:
+            return True
+    return False
+
 def run_builder(creep):
     creep.memory.role = 'Builder'
     #print('Builder {} assigned to {}'.format(creep.name, creep.memory.state))
@@ -21,8 +27,7 @@ def run_builder(creep):
         behaviors.harvestEnergy(creep)
     elif creep.memory.state == 'Building':
         # Select target
-
-        if creep.memory.constructing:
+        if hasValidConstructionTarget(creep):
             print('{} keeping target'.format(creep))
             target = Game.getObjectById(creep.memory.constructing)
         else:

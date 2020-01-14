@@ -42,7 +42,7 @@ def main():
     global actualHarvesters, actualBuilders, actualWallEs
     countStuff()
 ############ Strategic planning section
-    desiredBuilders = 5
+    desiredBuilders = 3
     desiredWallEs = 0
 
 ########### Creep memory management
