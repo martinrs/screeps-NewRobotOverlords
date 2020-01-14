@@ -14,7 +14,7 @@ __pragma__('noalias', 'update')
 def run_harvester(creep):
     creep.memory.role = 'Harvester'
     #print(creep)
-    if not creep.memory.state:
+    if not creep.memory.state == 'Depositing':
         creep.memory.state = 'Harvesting'
 
     if creep.memory.state == 'Harvesting':

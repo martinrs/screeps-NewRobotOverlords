@@ -42,7 +42,7 @@ def main():
     global actualHarvesters, actualBuilders, actualWallEs
     countStuff()
 ############ Strategic planning section
-    desiredBuilders = 3
+    desiredBuilders = 0
     desiredWallEs = 0
 
 ########### Creep memory management
@@ -55,7 +55,7 @@ def main():
     for name in Object.keys(Game.creeps).reverse():
         creep = Game.creeps[name]
 
-        if creep.memory.role == 'Builder' or actualBuilders < desiredBuilders:
+        if actualBuilders < desiredBuilders:
             #builder.run_builder(creep, harvesterDistribution)
             creep.memory.target = ''
             builder.run_builder(creep)
@@ -83,7 +83,7 @@ def main():
                 spawn.createCreep([WORK, CARRY, MOVE, MOVE])
             # If there are less than 10 creeps but at least one, wait until all spawns and extensions are full before
             # spawning.
-            elif num_creeps < 10 and spawn.room.energyAvailable >= spawn.room.energyCapacityAvailable:
+        elif num_creeps < 10 and spawn.room.energyAvailable >= spawn.room.energyCapacityAvailable:
                 # If we have more energy, spawn a bigger creep.
                 if spawn.room.energyCapacityAvailable >= 350:
                     spawn.createCreep([WORK, CARRY, CARRY, MOVE, MOVE, MOVE])

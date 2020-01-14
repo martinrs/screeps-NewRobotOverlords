@@ -10,8 +10,8 @@ __pragma__('noalias', 'set')
 __pragma__('noalias', 'type')
 __pragma__('noalias', 'update')
 
-def hasValidConstructionTarget(creep):
-    for site in creep.room.find(FIND_MY_CONSTRUCTION_SITES):
+def hasValidConstructionTarget(creep, sites):
+    for site in sites:
         if site.id == creep.memory.constructing:
             return True
     return False
@@ -26,13 +26,15 @@ def run_builder(creep):
     if creep.memory.state == 'Harvesting':
         behaviors.harvestEnergy(creep)
     elif creep.memory.state == 'Building':
+        sites = creep.room.find(FIND_MY_CONSTRUCTION_SITES)
         # Select target
-        if hasValidConstructionTarget(creep):
-            print('{} keeping target'.format(creep))
+        if hasValidConstructionTarget(creep, sites):
+            creep.say('{} keeping target'.format(creep))
             target = Game.getObjectById(creep.memory.constructing)
         else:
-            print('{} getting new random target'.format(creep))
-            target = _.sample(creep.room.find(FIND_MY_CONSTRUCTION_SITES))
+            creep.say('{} getting new random target'.format(creep.name))
+            target = _.sample(sites)
+            #print(creep.room.find(FIND_MY_CONSTRUCTION_SITES))
             creep.memory.constructing = target.id
 
         # Build or move closer
