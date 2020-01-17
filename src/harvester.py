@@ -11,14 +11,14 @@ __pragma__('noalias', 'type')
 __pragma__('noalias', 'update')
 
 
-def run_harvester(creep):
+def run_harvester(creep, distribution):
     creep.memory.role = 'Harvester'
     #print(creep)
     if not creep.memory.state == 'Depositing':
         creep.memory.state = 'Harvesting'
 
     if creep.memory.state == 'Harvesting':
-        behaviors.harvestEnergy(creep)
+        behaviors.harvestEnergy(creep, distribution)
     elif creep.memory.state == 'Depositing':
         # If we have a saved target, use it
         if creep.memory.target:
@@ -32,4 +32,4 @@ def run_harvester(creep):
                 .sample()
             creep.memory.target = target.id
 
-        behaviors.depositEnergy(creep,target)
+        behaviors.depositEnergy(creep, target)

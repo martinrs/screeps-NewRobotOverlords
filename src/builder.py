@@ -16,7 +16,7 @@ def hasValidConstructionTarget(creep, sites):
             return True
     return False
 
-def run_builder(creep):
+def run_builder(creep, distribution):
     creep.memory.role = 'Builder'
     #print('Builder {} assigned to {}'.format(creep.name, creep.memory.state))
 
@@ -24,7 +24,7 @@ def run_builder(creep):
         creep.memory.state = 'Building'
 
     if creep.memory.state == 'Harvesting':
-        behaviors.harvestEnergy(creep)
+        behaviors.harvestEnergy(creep, distribution)
     elif creep.memory.state == 'Building':
         sites = creep.room.find(FIND_MY_CONSTRUCTION_SITES)
         # Select target

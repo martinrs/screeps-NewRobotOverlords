@@ -9,9 +9,9 @@ __pragma__('noalias', 'set')
 __pragma__('noalias', 'type')
 __pragma__('noalias', 'update')
 
-def harvestEnergy(creep):
+def harvestEnergy(creep, distribution):
     #def harvestEnergy(creep, distribution):
-    
+
     # If we're full, stop filling up and remove the saved source
     if creep.memory.state == 'Harvesting' and _.sum(creep.carry) >= creep.carryCapacity:
         creep.memory.state = 'Depositing'
@@ -23,15 +23,16 @@ def harvestEnergy(creep):
 
     if creep.memory.state == 'Harvesting':
         # If we have a saved source, use it
-        if creep.memory.source:
-            source = Game.getObjectById(creep.memory.source)
-        else:
-            source = _.sample(creep.room.find(FIND_SOURCES))
-            """source = distribution[0]
-            for s in distribution:
+        if not creep.memory.source:
+            source = _.sample(Object.keys(distribution))
+            print(source)
+            for s in Object.keys(distribution):
                 if distribution[s] < distribution[source]:
                     source = s
-            creep.memory.source = source.id"""
+            creep.memory.source = source
+        source = Game.getObjectById(creep.memory.source)
+
+
         creep.memory.source = source.id
 
         # If we're near the source, harvest it - otherwise, move to it.
