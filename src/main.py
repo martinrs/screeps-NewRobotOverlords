@@ -58,9 +58,12 @@ def main():
         creep = Game.creeps[name]
         harvesterDistribution = countHarvesterDistribution(creep.room)
         if creep.memory.role == 'Builder':
-            if actualBuilders < desiredBuilders:
+            if actualBuilders <= desiredBuilders:
                 creep.memory.target = ''
                 builder.run_builder(creep, harvesterDistribution)
+            elif actualBuilders > desiredBuilders:
+                creep.memory.constructing = ''
+                harvester.run_harvester(creep, harvesterDistribution)
         elif actualBuilders < desiredBuilders:
             creep.memory.target = ''
             builder.run_builder(creep, harvesterDistribution)
