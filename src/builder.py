@@ -12,6 +12,7 @@ __pragma__('noalias', 'update')
 
 def hasValidConstructionTarget(creep, sites):
     for site in sites:
+        print(site.id)
         if site.id == creep.memory.constructing:
             return True
     return False
@@ -27,6 +28,7 @@ def run_builder(creep, distribution):
         behaviors.harvestEnergy(creep, distribution)
     elif creep.memory.state == 'Building':
         sites = creep.room.find(FIND_MY_CONSTRUCTION_SITES)
+        print(str(sites))
         # Select target
         if hasValidConstructionTarget(creep, sites):
             creep.say('{} keeping target'.format(creep))
@@ -48,7 +50,7 @@ def run_builder(creep, distribution):
                 print('Deleted target')
                 del creep.memory.constructing
         else:
-            print('Moving to {}'.format(target))
+            creep.say('Moving to {}'.format(target))
             creep.moveTo(target)
     else:
         creep.memory.state = 'Building'
