@@ -10,35 +10,38 @@ __pragma__('noalias', 'set')
 __pragma__('noalias', 'type')
 __pragma__('noalias', 'update')
 
-def run_wall_e(creep):
+def run_wall_e(creep, distribution):
     creep.memory.role = 'Wall-E'
 
     if creep.memory.state != 'Walling' and creep.memory.state != 'Harvesting':
         creep.memory.state = 'Walling'
 
     if creep.memory.state == 'Harvesting':
-        behaviors.harvestEnergy(creep)
+        behaviors.harvestEnergy(creep, distribution)
     elif creep.memory.state == 'Walling':
-        if creep.memory.target:
-            target = Game.getObjectById(creep.memory.target)
+        if creep.memory.targetWall:
+            print('Wall-E keeps target')
+            target = Game.getObjectById(creep.memory.targetWall)
         else:
-            walls = creep.room.find(FIND_STRUCTURES).filter(lambda s: (s.structureType(STRUCTURE_WALL)))
+            print('Wall-E new target')
+            walls = creep.room.find(FIND_STRUCTURES).filter(lambda s: (s.structureType==STRUCTURE_WALL))
             if len(walls) > 0:
                 weakest = walls[0]
                 for wall in walls:
                     if wall.hits < weakest.hits:
                         weakest = wall
-                if weakest.hits < 10000:
-                    creep.memory.target = weakest.id
+                    creep.memory.targetWall = weakest.id
                     # Wall or move closer
-                    if creep.pos.isNearTo(weakest, 3):
-                        result = creep.repair(weakest)
-                        if result == ERR_NOT_ENOUGH_RESOURCES:
-                            creep.memory.state = 'Harvesting'
-                        elif result != OK:
-                            creep.memory.state = 'Harvesting'
-                            del creep.memory.target
-                    else:
-                        creep.moveTo(target)
+            target = Game.getObjectById(creep.memory.targetWall)
 
-            creep.memory.target = target.id
+        if creep.pos.inRangeTo(target, 3):
+            print('Wall-E repairs target')
+            result = creep.repair(weakest)
+            if result == ERR_NOT_ENOUGH_RESOURCES:
+                creep.memory.state = 'Harvesting'
+            elif result != OK:
+                creep.memory.state = 'Harvesting'
+                del creep.memory.targetWall
+        else:
+            print('Wall-E moving to target')
+            creep.moveTo(target)
