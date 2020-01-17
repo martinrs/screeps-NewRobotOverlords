@@ -34,10 +34,11 @@ def countStuff():
     actualBuilders = _.sum(Game.creeps, lambda b: b.memory.role == 'Builder')
     actualWallEs = _.sum(Game.creeps, lambda b: b.memory.role == 'Wall-E')
 
-    #harvesterDistribution = countHarvesterDistribution(Game.creeps[Object.keys(Game.creeps)[0]].room)
+    """
+    harvesterDistribution = countHarvesterDistribution(Game.creeps[Object.keys(Game.creeps)[0]].room)
     for key in Object.keys(harvesterDistribution):
         print(key, harvesterDistribution[key])
-
+    """
 def main():
     global actualHarvesters, actualBuilders, actualWallEs
     countStuff()
