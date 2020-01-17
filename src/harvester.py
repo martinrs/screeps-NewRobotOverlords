@@ -28,8 +28,7 @@ def run_harvester(creep):
             # Get a random new target.
             #print('{} getting new random target'.format(creep))
             target = _(creep.room.find(FIND_STRUCTURES)) \
-                .filter(lambda s: (s.structureType == STRUCTURE_TOWER or s.structureType == STRUCTURE_SPAWN or s.structureType == STRUCTURE_EXTENSION
-                                   or s.energy < s.energyCapacity) or s.structureType == STRUCTURE_CONTROLLER) \
+                .filter(lambda s: (s.structureType == STRUCTURE_TOWER or s.structureType == STRUCTURE_EXTENSION or s.energy < s.energyCapacity) or s.structureType == STRUCTURE_CONTROLLER or s.structureType == STRUCTURE_SPAWN) \
                 .sample()
             creep.memory.target = target.id
 
