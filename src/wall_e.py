@@ -42,6 +42,9 @@ def run_wall_e(creep, distribution):
             elif result != OK:
                 creep.memory.state = 'Harvesting'
                 del creep.memory.targetWall
+            if target.hits >= 1000:
+                del creep.memory.targetWall
+
         else:
             print('Wall-E moving to target')
             creep.moveTo(target)
