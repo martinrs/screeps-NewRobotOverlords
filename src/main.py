@@ -46,7 +46,7 @@ def main():
         if desiredBuilders < 1:
             desiredBuilders = 1
 
-    weakwalls = len(_.sample(Game.creeps).room.find(FIND_STRUCTURES).filter(lambda s: (s.structureType==STRUCTURE_WALL and s.hits < 1000)))
+    weakwalls = len(_.sample(Game.creeps).room.find(FIND_STRUCTURES).filter(lambda s: (s.structureType==STRUCTURE_WALL and s.hits < wall_e.weakWallLimit)))
     if weakwalls > 0:
         desiredWallEs = 1
     else:

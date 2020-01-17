@@ -10,6 +10,8 @@ __pragma__('noalias', 'set')
 __pragma__('noalias', 'type')
 __pragma__('noalias', 'update')
 
+weakWallLimit = 10000
+
 def run_wall_e(creep, distribution):
     creep.memory.role = 'Wall-E'
 
@@ -42,7 +44,7 @@ def run_wall_e(creep, distribution):
             elif result != OK:
                 creep.memory.state = 'Harvesting'
                 del creep.memory.targetWall
-            elif target.hits >= 1000:
+            elif target.hits >= weakWallLimit:
                 del creep.memory.targetWall
 
         else:
