@@ -45,7 +45,13 @@ def main():
         desiredBuilders = int(numberOfConstructionSites / len(Game.creeps))
         if desiredBuilders < 1:
             desiredBuilders = 1
-    desiredWallEs = 0
+
+    weakwalls = len(_.sample(Game.creeps).room.find(FIND_STRUCTURES).filter(lambda s: (s.structureType==STRUCTURE_WALL and s.hits < 1000)))
+    if weakwalls > 0:
+        desiredWallEs = 1
+    else:
+        desiredWallEs = 0
+
 
 ########### Creep memory management
     # Clear dead ones
@@ -67,8 +73,15 @@ def main():
         elif actualBuilders < desiredBuilders:
             creep.memory.target = ''
             builder.run_builder(creep, harvesterDistribution)
+
+        elif creep.memory.role == 'Wall-E':
+            if actualWallEs <= desiredWallEs:
+                wall_e.run_wall_e(creep, harvesterDistribution)
+            elif actualWallEs > desiredWallEs:
+                harvester.run_harvester(creep, harvesterDistribution)
         elif actualWallEs < desiredWallEs:
-            wall_e.run_wall_e(creep)
+            creep.memory.target = ''
+            wall_e.run_wall_e(creep, harvesterDistribution)
         else:
             harvester.run_harvester(creep, harvesterDistribution)
         countStuff()
