@@ -25,13 +25,11 @@ def harvestEnergy(creep, distribution):
         # If we have a saved source, use it
         if not creep.memory.source:
             source = _.sample(Object.keys(distribution))
-            print(source)
             for s in Object.keys(distribution):
                 if distribution[s] < distribution[source]:
                     source = s
             creep.memory.source = source
         source = Game.getObjectById(creep.memory.source)
-
 
         creep.memory.source = source.id
 
