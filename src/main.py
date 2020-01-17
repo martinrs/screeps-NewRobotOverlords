@@ -40,6 +40,11 @@ def main():
     countStuff()
 ############ Strategic planning section
     desiredBuilders = 0
+    numberOfConstructionSites = len(_.sample(Game.creeps).room.find(FIND_MY_CONSTRUCTION_SITES))
+    if numberOfConstructionSites > 0:
+        desiredBuilders = int(numberOfConstructionSites / len(Game.creeps))
+        if desiredBuilders < 1:
+            desiredBuilders = 1
     desiredWallEs = 0
 
 ########### Creep memory management
@@ -52,7 +57,11 @@ def main():
     for name in Object.keys(Game.creeps).reverse():
         creep = Game.creeps[name]
         harvesterDistribution = countHarvesterDistribution(creep.room)
-        if actualBuilders < desiredBuilders:
+        if creep.memory.role == 'Builder':
+            if actualBuilders < desiredBuilders:
+                creep.memory.target = ''
+                builder.run_builder(creep, harvesterDistribution)
+        elif actualBuilders < desiredBuilders:
             creep.memory.target = ''
             builder.run_builder(creep, harvesterDistribution)
         elif actualWallEs < desiredWallEs:
