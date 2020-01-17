@@ -36,7 +36,7 @@ def run_wall_e(creep, distribution):
 
         if creep.pos.inRangeTo(target, 3):
             print('Wall-E repairs target')
-            result = creep.repair(weakest)
+            result = creep.repair(target)
             if result == ERR_NOT_ENOUGH_RESOURCES:
                 creep.memory.state = 'Harvesting'
             elif result != OK:
