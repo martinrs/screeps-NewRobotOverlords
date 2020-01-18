@@ -26,7 +26,12 @@ def run_harvester(creep, distribution):
             target = Game.getObjectById(creep.memory.target)
         else:
             # Get a random new target.
-            #print('{} getting new random target'.format(creep))
+
+            ## Vælg target i prioriteret rækkefølge
+            ## Spawns
+            ## Towers
+            ## Extensions op til 350 energy
+            ## Controller eller extensions til fuld
             target = _(creep.room.find(FIND_STRUCTURES)) \
                 .filter(lambda s: (s.structureType == STRUCTURE_TOWER or s.structureType == STRUCTURE_EXTENSION or s.energy < s.energyCapacity) or s.structureType == STRUCTURE_CONTROLLER or s.structureType == STRUCTURE_SPAWN) \
                 .sample()
