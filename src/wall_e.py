@@ -13,6 +13,9 @@ __pragma__('noalias', 'update')
 weakWallLimit = 10000
 
 def run_wall_e(creep, distribution):
+    if len(Game.creeps) > 5:
+        weakWallLimit = 100000
+
     creep.memory.role = 'Wall-E'
 
     if creep.memory.state != 'Walling' and creep.memory.state != 'Harvesting':
