@@ -40,17 +40,19 @@ def main():
     countStuff()
 ############ Strategic planning section
     desiredBuilders = 0
-    numberOfConstructionSites = len(_.sample(Game.creeps).room.find(FIND_MY_CONSTRUCTION_SITES))
-    if numberOfConstructionSites > 0:
-        desiredBuilders = int(numberOfConstructionSites / len(Game.creeps))
-        if desiredBuilders < 1:
-            desiredBuilders = 1
+    desiredWallEs = 0
+    if len(Game.creeps) > 0:
 
-    weakwalls = len(_.sample(Game.creeps).room.find(FIND_STRUCTURES).filter(lambda s: (s.structureType==STRUCTURE_WALL and s.hits < wall_e.weakWallLimit)))
-    if weakwalls > 0:
-        desiredWallEs = 1
-    else:
-        desiredWallEs = 0
+        numberOfConstructionSites = len(_.sample(Game.creeps).room.find(FIND_MY_CONSTRUCTION_SITES))
+        if numberOfConstructionSites > 0:
+            desiredBuilders = int(numberOfConstructionSites / len(Game.creeps))
+            if desiredBuilders < 1:
+                desiredBuilders = 1
+
+        weakwalls = len(_.sample(Game.creeps).room.find(FIND_STRUCTURES).filter(lambda s: (s.structureType==STRUCTURE_WALL and s.hits < wall_e.weakWallLimit)))
+        if weakwalls > 0:
+            desiredWallEs = 1
+
 
 
 ########### Creep memory management
@@ -103,11 +105,11 @@ def main():
                 spawn.createCreep([WORK, CARRY, MOVE, MOVE])
             # If there are less than 10 creeps but at least one, wait until all spawns and extensions are full before
             # spawning.
-        elif num_creeps < 15 and spawn.room.energyAvailable >= spawn.room.energyCapacityAvailable:
+            elif num_creeps < 15 and spawn.room.energyAvailable >= spawn.room.energyCapacityAvailable:
                 # If we have more energy, spawn a bigger creep.
                 if spawn.room.energyCapacityAvailable >= 350:
                     spawn.createCreep([WORK, CARRY, CARRY, MOVE, MOVE, MOVE])
-                else:
-                    spawn.createCreep([WORK, CARRY, MOVE, MOVE])
+            elif num_creeps == 0:
+                spawn.createCreep([WORK, CARRY, MOVE, MOVE])
 
 module.exports.loop = main
