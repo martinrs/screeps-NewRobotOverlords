@@ -18,7 +18,7 @@ def run_wall_e(creep, distribution):
     if creep.memory.state != 'Walling' and creep.memory.state != 'Harvesting':
         creep.memory.state = 'Walling'
 
-    if creep.memory.state == 'Harvesting':
+    if creep.memory.state == 'Harvesting' and creep.store.getUsedCapacity(RESOURCE_ENERGY) == 0:
         behaviors.harvestEnergy(creep, distribution)
     elif creep.memory.state == 'Walling':
         if creep.memory.targetWall:
