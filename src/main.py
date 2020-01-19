@@ -66,10 +66,10 @@ def main():
 ########### Creep work allocation
     enemyCreeps = aCreep.room.find(FIND_HOSTILE_CREEPS)
     for name in Object.keys(Game.creeps).reverse():
+        creep = Game.creeps[name]
         if len(enemyCreeps) > 0:
             wall_e.run_wall_e(creep, harvesterDistribution)
         else:
-            creep = Game.creeps[name]
             harvesterDistribution = countHarvesterDistribution(creep.room)
             if creep.memory.role == 'Builder':
                 if actualBuilders <= desiredBuilders:
