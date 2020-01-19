@@ -1,4 +1,4 @@
-import harvester, builder, wall_e
+import harvester, builder, wall_e, tower
 # defs is a package which claims to export all constants and some JavaScript objects, but in reality does
 #  nothing. This is useful mainly when using an editor like PyCharm, so that it 'knows' that things like Object, Creep,
 #  Game, etc. do exist.
@@ -42,18 +42,20 @@ def main():
     desiredBuilders = 0
     desiredWallEs = 0
     if len(Game.creeps) > 0:
-
-        numberOfConstructionSites = len(_.sample(Game.creeps).room.find(FIND_MY_CONSTRUCTION_SITES))
+        aCreep = _.sample(Game.creeps)
+        numberOfConstructionSites = len(aCreep.room.find(FIND_MY_CONSTRUCTION_SITES))
         if numberOfConstructionSites > 0:
             desiredBuilders = int(numberOfConstructionSites / len(Game.creeps))
             if desiredBuilders < 1:
                 desiredBuilders = 1
 
-        weakwalls = len(_.sample(Game.creeps).room.find(FIND_STRUCTURES).filter(lambda s: (s.structureType==STRUCTURE_WALL and s.hits < wall_e.weakWallLimit)))
+        weakwalls = len(aCreep.room.find(FIND_STRUCTURES).filter(lambda s: (s.structureType==STRUCTURE_WALL and s.hits < wall_e.weakWallLimit)))
         if weakwalls > 0:
             desiredWallEs = 1
 
-
+########### Tower work allocation
+        for tower in aCreep.room.find(FIND_STRUCTURES).filter(lambda s: s.structureType == STRUCTURE_TOWER):
+            tower.run_tower(tower)
 
 ########### Creep memory management
     # Clear dead ones
@@ -61,7 +63,7 @@ def main():
         if not Game.creeps[name]:
             del Memory.creeps[name]
 
-########### Work allocation
+########### Creep work allocation
     for name in Object.keys(Game.creeps).reverse():
         creep = Game.creeps[name]
         harvesterDistribution = countHarvesterDistribution(creep.room)
