@@ -1,6 +1,5 @@
 from defs import *
 import behaviors
-from math import sqrt, pow
 
 __pragma__('noalias', 'name')
 __pragma__('noalias', 'undefined')
@@ -11,19 +10,28 @@ __pragma__('noalias', 'set')
 __pragma__('noalias', 'type')
 __pragma__('noalias', 'update')
 
+"""
+Prioritet for tårn:
+Search and destroy
+Heal Creeps
+Rep bygninger (ikke walls)
+"""
+
 def run_tower(tower):
-    if tower.isactive():
+    if tower.isActive():
 
         ##### Search and destroy
         enemyCreeps = tower.room.find(FIND_HOSTILE_CREEPS)
         if len(enemyCreeps) > 0:
-            closest = enemyCreeps[0]
-            rangeToClosest = tower.room.pos.getRangeTo(closest)
+            closest = _.sample(enemyCreeps)
+            print(closest)
+            rangeToClosest = tower.pos.getRangeTo(closest)
             for creep in enemyCreeps:
-                rangeToCreep = tower.room.pos.getRangeTo(closest)
+                rangeToCreep = tower.pos.getRangeTo(closest)
                 if rangeToCreep < rangeToClosest:
                     closest = creep
                     rangeToClosest = rangeToCreep
             tower.attack(closest)
-
-        myCreeps = Game.creeps.filter(lambda s: s.room == tower.room)
+        else:
+            pass
+            #myCreeps = Game.creeps.filter(lambda s: s.room == tower.room)

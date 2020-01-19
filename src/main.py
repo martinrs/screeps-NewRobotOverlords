@@ -54,8 +54,8 @@ def main():
             desiredWallEs = 1
 
 ########### Tower work allocation
-        for tower in aCreep.room.find(FIND_STRUCTURES).filter(lambda s: s.structureType == STRUCTURE_TOWER):
-            tower.run_tower(tower)
+        for aTower in aCreep.room.find(FIND_STRUCTURES).filter(lambda s: s.structureType == STRUCTURE_TOWER):
+            tower.run_tower(aTower)
 
 ########### Creep memory management
     # Clear dead ones
@@ -64,30 +64,34 @@ def main():
             del Memory.creeps[name]
 
 ########### Creep work allocation
+    enemyCreeps = aCreep.room.find(FIND_HOSTILE_CREEPS)
     for name in Object.keys(Game.creeps).reverse():
-        creep = Game.creeps[name]
-        harvesterDistribution = countHarvesterDistribution(creep.room)
-        if creep.memory.role == 'Builder':
-            if actualBuilders <= desiredBuilders:
-                creep.memory.target = ''
-                builder.run_builder(creep, harvesterDistribution)
-            elif actualBuilders > desiredBuilders:
-                creep.memory.constructing = ''
-                harvester.run_harvester(creep, harvesterDistribution)
-        elif actualBuilders < desiredBuilders:
-            creep.memory.target = ''
-            builder.run_builder(creep, harvesterDistribution)
-
-        elif creep.memory.role == 'Wall-E':
-            if actualWallEs <= desiredWallEs:
-                wall_e.run_wall_e(creep, harvesterDistribution)
-            elif actualWallEs > desiredWallEs:
-                harvester.run_harvester(creep, harvesterDistribution)
-        elif actualWallEs < desiredWallEs:
-            creep.memory.target = ''
+        if len(enemyCreeps) > 0:
             wall_e.run_wall_e(creep, harvesterDistribution)
         else:
-            harvester.run_harvester(creep, harvesterDistribution)
+            creep = Game.creeps[name]
+            harvesterDistribution = countHarvesterDistribution(creep.room)
+            if creep.memory.role == 'Builder':
+                if actualBuilders <= desiredBuilders:
+                    creep.memory.target = ''
+                    builder.run_builder(creep, harvesterDistribution)
+                elif actualBuilders > desiredBuilders:
+                    creep.memory.constructing = ''
+                    harvester.run_harvester(creep, harvesterDistribution)
+            elif actualBuilders < desiredBuilders:
+                creep.memory.target = ''
+                builder.run_builder(creep, harvesterDistribution)
+
+            elif creep.memory.role == 'Wall-E':
+                if actualWallEs <= desiredWallEs:
+                    wall_e.run_wall_e(creep, harvesterDistribution)
+                elif actualWallEs > desiredWallEs:
+                    harvester.run_harvester(creep, harvesterDistribution)
+            elif actualWallEs < desiredWallEs:
+                creep.memory.target = ''
+                wall_e.run_wall_e(creep, harvesterDistribution)
+            else:
+                harvester.run_harvester(creep, harvesterDistribution)
         countStuff()
 
 ############ Report to console
