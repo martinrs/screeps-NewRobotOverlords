@@ -24,7 +24,6 @@ def run_tower(tower):
         enemyCreeps = tower.room.find(FIND_HOSTILE_CREEPS)
         if len(enemyCreeps) > 0:
             closest = _.sample(enemyCreeps)
-            print(closest)
             rangeToClosest = tower.pos.getRangeTo(closest)
             for creep in enemyCreeps:
                 rangeToCreep = tower.pos.getRangeTo(closest)
@@ -32,6 +31,13 @@ def run_tower(tower):
                     closest = creep
                     rangeToClosest = rangeToCreep
             tower.attack(closest)
-        else:
-            pass
-            #myCreeps = Game.creeps.filter(lambda s: s.room == tower.room)
+        elif len(Game.creeps) > 0:
+            weakest = _.sample(Game.creeps)
+            weakestHitPercent = weakest.hits/weakest.hitsMax
+            for name in Object.keys(Game.creeps):
+                creep = Game.creeps[name]
+                if creep.hits / creep.hitsMax < weakestHitPercent:
+                    weakest = creep
+                    weakestHitPercent = weakest.hits/weakest.hitsMax
+            if weakestHitPercent < 1:
+                tower.heal(weakest)
