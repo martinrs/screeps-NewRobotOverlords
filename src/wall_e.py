@@ -14,6 +14,8 @@ weakWallLimit = 100000
 
 def run_wall_e(creep, distribution):
 
+    creep.memory.role = 'Wall-E'
+
     if creep.memory.state != 'Walling' and creep.memory.state != 'Harvesting':
         if creep.store.getUsedCapacity(RESOURCE_ENERGY) < 1:
             creep.memory.state = 'Harvesting'
