@@ -67,8 +67,8 @@ def main():
     enemyCreeps = aCreep.room.find(FIND_HOSTILE_CREEPS)
     for name in Object.keys(Game.creeps).reverse():
         creep = Game.creeps[name]
+        
         if len(enemyCreeps) > 0:
-            print('FIGHT!')
             wall_e.run_wall_e(creep, harvesterDistribution)
         else:
             harvesterDistribution = countHarvesterDistribution(creep.room)
