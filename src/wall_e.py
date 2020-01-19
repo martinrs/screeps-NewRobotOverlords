@@ -10,11 +10,11 @@ __pragma__('noalias', 'set')
 __pragma__('noalias', 'type')
 __pragma__('noalias', 'update')
 
-weakWallLimit = 10000
+weakWallLimit = 100000
 
 def run_wall_e(creep, distribution):
-    if len(Game.creeps) > 5:
-        weakWallLimit = 100000
+    if len(Game.creeps) <= 3:
+        weakWallLimit = 10000
 
     creep.memory.role = 'Wall-E'
 
