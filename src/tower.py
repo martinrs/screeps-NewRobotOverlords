@@ -32,6 +32,7 @@ def run_tower(tower):
                     rangeToClosest = rangeToCreep
             tower.attack(closest)
         elif len(Game.creeps) > 0:
+            ### Heal Creeps
             weakest = _.sample(Game.creeps)
             weakestHitPercent = weakest.hits/weakest.hitsMax
             for name in Object.keys(Game.creeps):
@@ -41,3 +42,14 @@ def run_tower(tower):
                     weakestHitPercent = weakest.hits/weakest.hitsMax
             if weakestHitPercent < 1:
                 tower.heal(weakest)
+        else:
+            ### Reparation af bygninger
+            structures = tower.room.find(FIND_MY_STRUCTURES)
+            weakest = _.sample(structures)
+            weakestHitPercent = weakest.hits/weakest.hitsMax
+            for structure in structures:
+                if structure.hits / structure.hitsMax < weakestHitPercent:
+                    weakest = structure
+                    weakestHitPercent = weakest.hits/weakest.hitsMax
+                if weakestHitPercent < 1:
+                    tower.repair(weakest)
