@@ -35,14 +35,34 @@ def countStuff():
     actualBuilders = _.sum(Game.creeps, lambda b: b.memory.role == 'Builder')
     actualWallEs = _.sum(Game.creeps, lambda b: b.memory.role == 'Wall-E')
 
+def makeStructureDict(room):
+    spawns = room.find(FIND_MY_SPAWNS)
+    towers = []
+    extensions = []
+    controllers = []
+
+    structures = room.find(FIND_MY_STRUCTURES)
+    for structure in room.find(FIND_STRUCTURES):
+        if structure.structureType == STRUCTURE_TOWER:
+            towers.append(structure)
+        elif structure.structureType == STRUCTURE_EXTENSION:
+            extensions.append(structure)
+        elif structure.structureType == STRUCTURE_CONTROLLER:
+            controllers.append(structure)
+
+    return {'spawns': spawns, 'towers': towers, 'extensions': extensions, 'controllers': controllers}
+
+
 def main():
     global actualHarvesters, actualBuilders, actualWallEs
     countStuff()
+
 ############ Strategic planning section
     desiredBuilders = 0
     desiredWallEs = 0
     if len(Game.creeps) > 0:
         aCreep = _.sample(Game.creeps)
+        structureDict = makeStructureDict(aCreep.room)
         numberOfConstructionSites = len(aCreep.room.find(FIND_MY_CONSTRUCTION_SITES))
         if numberOfConstructionSites > 0:
             desiredBuilders = int(numberOfConstructionSites / len(Game.creeps))
@@ -67,7 +87,7 @@ def main():
     enemyCreeps = aCreep.room.find(FIND_HOSTILE_CREEPS)
     for name in Object.keys(Game.creeps).reverse():
         creep = Game.creeps[name]
-        
+
         if len(enemyCreeps) > 0:
             wall_e.run_wall_e(creep, harvesterDistribution)
         else:
@@ -92,7 +112,7 @@ def main():
                 creep.memory.target = ''
                 wall_e.run_wall_e(creep, harvesterDistribution)
             else:
-                harvester.run_harvester(creep, harvesterDistribution)
+                harvester.run_harvester(creep, harvesterDistribution, structureDict)
         countStuff()
 
 ############ Report to console
@@ -112,11 +132,11 @@ def main():
                 spawn.createCreep([WORK, CARRY, MOVE, MOVE])
             # If there are less than 10 creeps but at least one, wait until all spawns and extensions are full before
             # spawning.
-            elif num_creeps < 15 and spawn.room.energyAvailable >= spawn.room.energyCapacityAvailable:
+        elif num_creeps < 10 and spawn.room.energyAvailable >= spawn.room.energyCapacityAvailable:
                 # If we have more energy, spawn a bigger creep.
                 if spawn.room.energyCapacityAvailable >= 350:
                     spawn.createCreep([WORK, CARRY, CARRY, MOVE, MOVE, MOVE])
-            elif num_creeps == 0:
-                spawn.createCreep([WORK, CARRY, MOVE, MOVE])
+        elif num_creeps == 0:
+            spawn.createCreep([WORK, CARRY, MOVE, MOVE])
 
 module.exports.loop = main
