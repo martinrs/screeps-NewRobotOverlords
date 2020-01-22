@@ -50,8 +50,10 @@ def depositEnergy(creep, target):
         is_close = creep.pos.inRangeTo(target, 3)
 
     if is_close:
+        print(target)
+        print(target.store)
         # If we are targeting a spawn or extension, transfer energy. Otherwise, use upgradeController on it.
-        if target.store:
+        if target.store != None:
             result = creep.transfer(target, RESOURCE_ENERGY)
             if result == ERR_NOT_ENOUGH_RESOURCES:
                 del creep.memory.target
@@ -63,7 +65,10 @@ def depositEnergy(creep, target):
                     creep.name, target, RESOURCE_ENERGY, result))
         else:
             result = creep.upgradeController(target)
-        if result != OK:
+        if result == ERR_NOT_ENOUGH_RESOURCES:
+            del creep.memory.target
+            creep.memory.state = 'Harvesting'
+        elif result != OK:
             print("[{}] Unknown result from creep.upgradeController({}): {}".format(creep.name, target, result))
             del creep.memory.target
     else:
