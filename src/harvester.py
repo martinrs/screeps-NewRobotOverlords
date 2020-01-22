@@ -28,7 +28,7 @@ def run_harvester(creep, distribution, structureDict):
             print('{} new target'.format(creep))
             target = None
             for spawn in structureDict['spawns']:
-                if spawn.store.getFreeCapacity() > 0:
+                if spawn.store.getFreeCapacity(RESOURCE_ENERGY) > 0:
                     target = spawn
             if not target:
                 for tower in structureDict['towers']:
