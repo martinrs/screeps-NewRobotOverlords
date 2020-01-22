@@ -28,13 +28,12 @@ def run_builder(creep, distribution):
         behaviors.harvestEnergy(creep, distribution)
     elif creep.memory.state == 'Building':
         sites = creep.room.find(FIND_MY_CONSTRUCTION_SITES)
-        print(str(sites))
         # Select target
         if hasValidConstructionTarget(creep, sites):
-            creep.say('{} keeping target'.format(creep))
+            #creep.say('{} keeping target'.format(creep))
             target = Game.getObjectById(creep.memory.constructing)
         else:
-            creep.say('{} getting new random target'.format(creep.name))
+            #creep.say('{} getting new random target'.format(creep.name))
             target = _.sample(sites)
             #print(creep.room.find(FIND_MY_CONSTRUCTION_SITES))
             creep.memory.constructing = target.id
@@ -43,14 +42,14 @@ def run_builder(creep, distribution):
         #print('{} building {} ({})'.format(creep, Game.getObjectById(creep.memory.target).structureType, target))
         if creep.pos.inRangeTo(target, 3):
             result = creep.build(target)
-            print('{} built {} with result {}'.format(creep.name, target, result))
+            #print('{} built {} with result {}'.format(creep.name, target, result))
             if result == ERR_NOT_ENOUGH_RESOURCES:
                 creep.memory.state = 'Harvesting'
             elif result != OK:
-                print('Deleted target')
+                #print('Deleted target')
                 del creep.memory.constructing
         else:
-            creep.say('Moving to {}'.format(target))
+            #creep.say('Moving to {}'.format(target))
             creep.moveTo(target)
     else:
         creep.memory.state = 'Building'
