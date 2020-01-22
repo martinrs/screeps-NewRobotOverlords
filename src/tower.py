@@ -23,6 +23,7 @@ def run_tower(tower):
         ##### Search and destroy
         enemyCreeps = tower.room.find(FIND_HOSTILE_CREEPS)
         if len(enemyCreeps) > 0:
+            print('Tower angriber')
             closest = _.sample(enemyCreeps)
             rangeToClosest = tower.pos.getRangeTo(closest)
             for creep in enemyCreeps:
@@ -31,7 +32,7 @@ def run_tower(tower):
                     closest = creep
                     rangeToClosest = rangeToCreep
             tower.attack(closest)
-        elif len(Game.creeps) > 0:
+        else:
             ### Heal Creeps
             weakest = _.sample(Game.creeps)
             weakestHitPercent = weakest.hits/weakest.hitsMax
@@ -41,15 +42,16 @@ def run_tower(tower):
                     weakest = creep
                     weakestHitPercent = weakest.hits/weakest.hitsMax
             if weakestHitPercent < 1:
+                print('Tower healer')
                 tower.heal(weakest)
-        else:
-            ### Reparation af bygninger
-            structures = tower.room.find(FIND_MY_STRUCTURES)
-            weakest = _.sample(structures)
-            weakestHitPercent = weakest.hits/weakest.hitsMax
-            for structure in structures:
-                if structure.hits / structure.hitsMax < weakestHitPercent:
-                    weakest = structure
-                    weakestHitPercent = weakest.hits/weakest.hitsMax
+            else:
+                ### Reparation af bygninger
+                structures = tower.room.find(FIND_STRUCTURES).filter(lambda s: (s.structureType!=STRUCTURE_WALL and s.structureType != STRUCTURE_CONTROLLER))
+                weakest = _.sample(structures)
+                weakestHitPercent = weakest.hits/weakest.hitsMax
+                for structure in structures:
+                    if structure.hits / structure.hitsMax < weakestHitPercent:
+                        weakest = structure
+                        weakestHitPercent = weakest.hits/weakest.hitsMax
                 if weakestHitPercent < 1:
                     tower.repair(weakest)
