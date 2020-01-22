@@ -12,7 +12,7 @@ __pragma__('noalias', 'update')
 
 def hasValidConstructionTarget(creep, sites):
     for site in sites:
-        print(site.id)
+        #print(site.id)
         if site.id == creep.memory.constructing:
             return True
     return False
