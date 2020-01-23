@@ -28,7 +28,8 @@ def run_wall_e(creep, distribution):
         if creep.memory.targetWall:
             #print('Wall-E keeps target')
             target = Game.getObjectById(creep.memory.targetWall)
-            creep.moveTo(target)
+            if creep.pos.isNearTo(Game.getObjectById(creep.memory.source)):
+                creep.moveTo(target)
         else:
             #print('Wall-E new target')
             walls = creep.room.find(FIND_STRUCTURES).filter(lambda s: (s.structureType==STRUCTURE_WALL))
