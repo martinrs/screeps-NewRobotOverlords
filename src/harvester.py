@@ -34,7 +34,7 @@ def run_harvester(creep, distribution, structureDict):
             for spawn in structureDict['spawns']:
                 if spawn.store.getFreeCapacity(RESOURCE_ENERGY) > 0:
                     target = spawn
-            if not target and creep.room.energyAvailable < 350:
+            if not target and creep.room.energyAvailable < 400:
                 for ext in structureDict['extensions']:
                     if ext.store.getFreeCapacity(RESOURCE_ENERGY) > 0:
                         target = ext
