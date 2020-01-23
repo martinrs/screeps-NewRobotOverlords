@@ -50,8 +50,6 @@ def depositEnergy(creep, target):
         is_close = creep.pos.inRangeTo(target, 3)
 
     if is_close:
-        print(target)
-        print(target.store)
         # If we are targeting a spawn or extension, transfer energy. Otherwise, use upgradeController on it.
         if target.store != None:
             result = creep.transfer(target, RESOURCE_ENERGY)
