@@ -39,8 +39,10 @@ def run_harvester(creep, distribution, structureDict):
                     if ext.store.getFreeCapacity(RESOURCE_ENERGY) > 0:
                         target = ext
             if not target:
+                mostFreeCapacity = _.sample(structureDict['towers']).store.getFreeCapacity(RESOURCE_ENERGY)
                 for tower in structureDict['towers']:
-                    if tower.store.getFreeCapacity(RESOURCE_ENERGY) > 0:
+                    if tower.store.getFreeCapacity(RESOURCE_ENERGY) >= mostFreeCapacity:
+                        mostFreeCapacity = tower.store.getFreeCapacity(RESOURCE_ENERGY)
                         target = tower
             if not target:
                 if creep.room.energyAvailable == creep.room.energyCapacityAvailable:
