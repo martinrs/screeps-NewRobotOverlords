@@ -130,6 +130,6 @@ def main():
             if num_creeps <= 5 and spawn.room.energyAvailable >= 250:
                 spawn.createCreep([WORK, CARRY, MOVE, MOVE])
             elif num_creeps < 10 and spawn.room.energyCapacityAvailable >= 350:
-                spawn.createCreep([WORK, CARRY, CARRY, MOVE, MOVE, MOVE])
+                spawn.createCreep([WORK, WORK, CARRY, CARRY, MOVE, MOVE])
 
 module.exports.loop = main
