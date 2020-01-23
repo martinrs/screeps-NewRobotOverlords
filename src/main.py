@@ -125,11 +125,11 @@ def main():
     for name in Object.keys(Game.spawns):
         spawn = Game.spawns[name]
         if not spawn.spawning:
-            # Get the number of our creeps in the room.
             num_creeps = _.sum(Game.creeps, lambda c: c.pos.roomName == spawn.pos.roomName)
+            print(num_creeps)
             if num_creeps <= 5 and spawn.room.energyAvailable >= 250:
                 spawn.createCreep([WORK, CARRY, MOVE, MOVE])
-            elif num_creeps < 10 and spawn.room.energyCapacityAvailable >= 350:
+            elif num_creeps < 10 and spawn.room.energyAvailable >= 350:
                 spawn.createCreep([WORK, WORK, CARRY, CARRY, MOVE, MOVE])
 
 module.exports.loop = main
