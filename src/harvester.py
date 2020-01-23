@@ -25,7 +25,11 @@ def run_harvester(creep, distribution, structureDict):
             #print('{} keeping target'.format(creep))
             target = Game.getObjectById(creep.memory.target)
         else:
-            print('{} new target'.format(creep))
+            ## Vælg target i prioriteret rækkefølge
+            ## Spawns
+            ## Towers
+            ## Extensions op til 350 energy
+            ## Controller eller extensions (hvis energi ikke er fuld)
             target = None
             for spawn in structureDict['spawns']:
                 if spawn.store.getFreeCapacity(RESOURCE_ENERGY) > 0:
@@ -45,19 +49,6 @@ def run_harvester(creep, distribution, structureDict):
                     selection = _.sample([structureDict['controllers'], structureDict['extensions']])
                     target = _.sample(selection)
 
-
-            # Get a random new target.
-
-            ## Vælg target i prioriteret rækkefølge
-            ## Spawns
-            ## Towers
-            ## Extensions op til 350 energy
-            ## Controller eller extensions til fuld
-
-
-            """target = _(creep.room.find(FIND_STRUCTURES)) \
-                .filter(lambda s: (s.structureType == STRUCTURE_TOWER or s.structureType == STRUCTURE_EXTENSION or s.energy < s.energyCapacity) or s.structureType == STRUCTURE_CONTROLLER or s.structureType == STRUCTURE_SPAWN) \
-                .sample()"""
             creep.memory.target = target.id
 
         behaviors.depositEnergy(creep, target)
