@@ -32,11 +32,11 @@ def run_harvester(creep, distribution, structureDict):
                     target = spawn
             if not target:
                 for tower in structureDict['towers']:
-                    if tower.store.getFreeCapacity() > 0:
+                    if tower.store.getFreeCapacity(RESOURCE_ENERGY) > 0:
                         target = tower
             if not target and creep.room.energyAvailable < 350:
                 for ext in structureDict['extensions']:
-                    if ext.store.getFreeCapacity() > 0:
+                    if ext.store.getFreeCapacity(RESOURCE_ENERGY) > 0:
                         target = ext
             if not target:
                 if creep.room.energyAvailable == creep.room.energyCapacityAvailable:
