@@ -66,7 +66,7 @@ def main():
         numberOfConstructionSites = len(aCreep.room.find(FIND_MY_CONSTRUCTION_SITES))
         if numberOfConstructionSites > 0:
             desiredBuilders = int(numberOfConstructionSites / len(Game.creeps))
-            if desiredBuilders < 1:
+            if desiredBuilders < 2:
                 desiredBuilders = 2
 
         weakwalls = len(aCreep.room.find(FIND_STRUCTURES).filter(lambda s: (s.structureType==STRUCTURE_WALL and s.hits < wall_e.weakWallLimit)))
