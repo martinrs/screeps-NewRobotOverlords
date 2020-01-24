@@ -27,7 +27,7 @@ def run_harvester(creep, distribution, structureDict):
         else:
             ## Vælg target i prioriteret rækkefølge
             ## Spawns
-            ## Extensions op til 350 energy
+            ## Extensions op til 400 energy
             ## Towers
             ## Controller eller extensions (hvis energi ikke er fuld)
             target = None
