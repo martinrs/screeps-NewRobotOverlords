@@ -102,6 +102,7 @@ __py_build__/
 docs/_build/
 *\ Notes.txt
 .mypy_cache
+*.xlsx
 
 # Unit test / coverage reports #
 ################################
