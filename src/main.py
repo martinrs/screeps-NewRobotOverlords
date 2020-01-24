@@ -67,7 +67,7 @@ def main():
         if numberOfConstructionSites > 0:
             desiredBuilders = int(numberOfConstructionSites / len(Game.creeps))
             if desiredBuilders < 1:
-                desiredBuilders = 1
+                desiredBuilders = 2
 
         weakwalls = len(aCreep.room.find(FIND_STRUCTURES).filter(lambda s: (s.structureType==STRUCTURE_WALL and s.hits < wall_e.weakWallLimit)))
         if weakwalls > 0:
@@ -130,5 +130,5 @@ def main():
                 spawn.createCreep([WORK, CARRY, MOVE, MOVE])
             elif num_creeps < 10 and spawn.room.energyAvailable >= 400:
                 spawn.createCreep([WORK, WORK, CARRY, CARRY, MOVE, MOVE])
-            
+
 module.exports.loop = main
