@@ -29,12 +29,12 @@ def run_builder(creep, distribution):
     elif creep.memory.state == 'Building':
         sites = creep.room.find(FIND_MY_CONSTRUCTION_SITES)
         # Select target
-        if hasValidConstructionTarget(creep, sites):
-            #creep.say('{} keeping target'.format(creep))
-            target = Game.getObjectById(creep.memory.constructing)
-        else:
-            #creep.say('{} getting new random target'.format(creep.name))
-            target = _.sample(sites)
+        #creep.say('{} getting new random target'.format(creep.name))
+        target = _.sample(sites)
+        for site in sites:
+            if site.progress / site.progressTotal > target.progress / target.progressTotal:
+                target = site
+
             #print(creep.room.find(FIND_MY_CONSTRUCTION_SITES))
             creep.memory.constructing = target.id
 
