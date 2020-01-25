@@ -33,7 +33,7 @@ def run_wall_e(creep, distribution):
                     creep.moveTo(target)
         else:
             #print('Wall-E new target')
-            walls = creep.room.find(FIND_STRUCTURES).filter(lambda s: (s.structureType==STRUCTURE_WALL))
+            walls = creep.room.find(FIND_STRUCTURES).filter(lambda s: (s.structureType==STRUCTURE_WALL or s.structureType==STRUCTURE_RAMPART))
             if len(walls) > 0:
                 weakest = walls[0]
                 for wall in walls:
