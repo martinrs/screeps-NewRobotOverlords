@@ -1,4 +1,4 @@
-import harvester, builder, wall_e, tower
+import harvester, builder, wall_e, tower, settler
 # defs is a package which claims to export all constants and some JavaScript objects, but in reality does
 #  nothing. This is useful mainly when using an editor like PyCharm, so that it 'knows' that things like Object, Creep,
 #  Game, etc. do exist.
@@ -51,6 +51,11 @@ def makeStructureDict(room):
 
     return {'spawns': spawns, 'towers': towers, 'extensions': extensions, 'controllers': controllers}
 
+def isSettler(creep):
+    for body in creep.body:
+        if body.type == CLAIM:
+            return True
+    return False
 
 def main():
     ########### Creep memory management - Multiroom safe
@@ -68,7 +73,9 @@ def main():
             controlledRooms.append(spawn.room)
         if not spawn.spawning:
             num_creeps = _.sum(Game.creeps, lambda c: c.pos.roomName == spawn.pos.roomName)
-            if num_creeps < 10 and spawn.room.energyAvailable >= 800:
+            if spawn.room.energyAvailable >= 850 and not 'E48N38' in controlledRooms:
+                spawn.createCreep([CLAIM, MOVE, MOVE, MOVE, MOVE, MOVE])
+            elif num_creeps < 10 and spawn.room.energyAvailable >= 800:
                 spawn.createCreep([WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE])
             elif num_creeps < 10 and spawn.room.energyAvailable >= 400:
                 spawn.createCreep([WORK, WORK, CARRY, CARRY, MOVE, MOVE])
@@ -115,7 +122,9 @@ def main():
             if len(enemyCreeps) > 0:
                 wall_e.run_wall_e(creep, harvesterDistribution)
             else:
-                if creep.memory.role == 'Builder':
+                if isSettler(creep):
+                    settler.run_settler(creep, 'E48N38')
+                elif creep.memory.role == 'Builder':
                     if workerDistribution[room]['actualBuilders'] <= strategyData[room]['desiredBuilders']:
                         creep.memory.target = ''
                         builder.run_builder(creep, harvesterDistribution)
