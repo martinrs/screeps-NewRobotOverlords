@@ -141,6 +141,7 @@ def main():
 
     ############ Report to console  - Multiroom safe
     for room in Object.keys(workerDistribution):
-        print('{}: {} Creeps\t{}/{} Builders\t{} Wall-Es\t{} Harvesters'.format(room, len(creepsInRoom), workerDistribution[room]['actualBuilders'],strategyData[room]['desiredBuilders'], workerDistribution[room]['actualWallEs'], workerDistribution[room]['actualHarvesters']))
+        roomObj = Game.rooms[room[6:12]]
+        print('{}: Energy: {}/{}\t{}/{} Builders\t{} Wall-Es\t{} Harvesters\t{} Creeps'.format(room, roomObj.energyAvailable, roomObj.energyCapacityAvailable, workerDistribution[room]['actualBuilders'],strategyData[room]['desiredBuilders'], workerDistribution[room]['actualWallEs'], workerDistribution[room]['actualHarvesters'], len(creepsInRoom)))
 
 module.exports.loop = main
