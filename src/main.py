@@ -73,7 +73,7 @@ def main():
             controlledRooms.append(spawn.room)
         if not spawn.spawning:
             num_creeps = _.sum(Game.creeps, lambda c: c.pos.roomName == spawn.pos.roomName)
-            if spawn.room.energyAvailable >= 850 and not 'E48N38' in controlledRooms:
+            if spawn.room.energyAvailable >= 850 and not Game.rooms['E48N38'] in controlledRooms:
                 spawn.createCreep([CLAIM, MOVE, MOVE, MOVE, MOVE, MOVE])
             elif num_creeps < 10 and spawn.room.energyAvailable >= 800:
                 spawn.createCreep([WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE])
