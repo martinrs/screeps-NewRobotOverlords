@@ -46,7 +46,7 @@ def run_tower(tower):
                 tower.heal(weakest)
             else:
                 ### Reparation af bygninger
-                structures = tower.room.find(FIND_STRUCTURES).filter(lambda s: (s.structureType!=STRUCTURE_WALL and s.structureType != STRUCTURE_CONTROLLER))
+                structures = tower.room.find(FIND_STRUCTURES).filter(lambda s: (s.structureType!=STRUCTURE_WALL and s.structureType != STRUCTURE_CONTROLLER and s.structureType!=STRUCTURE_RAMPART))
                 weakest = _.sample(structures)
                 weakestHitPercent = weakest.hits/weakest.hitsMax
                 for structure in structures:
