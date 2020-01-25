@@ -49,7 +49,7 @@ def run_harvester(creep, distribution, structureDict):
                 if creep.room.energyAvailable == creep.room.energyCapacityAvailable:
                     target = _.sample(structureDict['controllers'])
                 else:
-                    selection = _.sample([structureDict['controllers'], structureDict['extensions']])
+                    selection = _.sample([structureDict['controllers'], structureDict['extensions'], structureDict['extensions']])
                     target = _.sample(selection)
 
             creep.memory.target = target.id
