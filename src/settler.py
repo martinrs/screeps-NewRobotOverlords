@@ -17,7 +17,7 @@ def run_settler(creep, targetRoom):
         if creep.pos.isNearTo(creep.room.controller):
             creep.claimController(creep.room.controller)
         else:
-            moveto(creep.room.controller)
+            moveTo(creep.room.controller)
     else:
         print('going to room')
         if creep.memory.path:
