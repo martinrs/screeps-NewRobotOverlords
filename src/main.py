@@ -21,8 +21,7 @@ def countHarvesterDistribution(room):
     for source in room.find(FIND_SOURCES):
         if not source.id in Object.keys(distribution):
             distribution[source.id] = 0
-        for name in Object.keys(Game.creeps):
-            creep = Game.creeps[name]
+        for creep in room.find(FIND_MY_CREEPS):
             if creep.room == room and creep.memory.source == source.id:
                 distribution[source.id] += 1
     return distribution
@@ -69,11 +68,11 @@ def main():
     for name in Object.keys(Game.spawns):
         spawn = Game.spawns[name]
         # Find de rum, jeg kontrollerer
-        if not spawn.room.id in controlledRooms:
+        if not spawn.room in controlledRooms:
             controlledRooms.append(spawn.room)
         if not spawn.spawning:
             num_creeps = _.sum(Game.creeps, lambda c: c.pos.roomName == spawn.pos.roomName)
-            if spawn.room.energyAvailable >= 850 and not Game.rooms['E48N38'] in controlledRooms:
+            if spawn.room.energyAvailable >= 1850 and not Game.rooms['E48N38'] in controlledRooms:
                 spawn.createCreep([CLAIM, MOVE, MOVE, MOVE, MOVE, MOVE])
             elif num_creeps < 10 and spawn.room.energyAvailable >= 800:
                 spawn.createCreep([WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE])
@@ -86,6 +85,8 @@ def main():
     strategyData = {}
     structureDict = {}
     workerDistribution = {}
+    expansionRoom = Game.rooms['E48N38']
+
     for room in controlledRooms:
         if room not in Object.keys(strategyData):
             strategyData[room] = {}
@@ -95,7 +96,6 @@ def main():
         strategyData[room]['desiredWallEs'] = 0
 
         structureDict[room] = makeStructureDict(room)
-
         if len(creepsInRoom) > 0:
             numberOfConstructionSites = len(room.find(FIND_MY_CONSTRUCTION_SITES))
             if numberOfConstructionSites > 0:
@@ -123,7 +123,11 @@ def main():
                 wall_e.run_wall_e(creep, harvesterDistribution)
             else:
                 if isSettler(creep):
-                    settler.run_settler(creep, 'E48N38')
+                    if expansionRoom != '' and expansionRoom not in controlledRooms:
+                        settler.run_settler(creep, expansionRoom)
+                if len(expansionRoom.spawns) == 0 and len(expansionRoom.find(FIND_MY_CONSTRUCTION_SITES).filter(lambda s: s.structureType == STRUCTURE_SPAWN)) > 0:
+                    spawnTarget = expansionRoom.find(FIND_MY_CONSTRUCTION_SITES).filter(lambda s: s.structureType == STRUCTURE_SPAWN)
+                    builder.run_builder(creep, countHarvesterDistribution(expansionRoom), target=spawnTarget)
                 elif creep.memory.role == 'Builder':
                     if workerDistribution[room]['actualBuilders'] <= strategyData[room]['desiredBuilders']:
                         creep.memory.target = ''
@@ -148,9 +152,17 @@ def main():
 
             workerDistribution[room] = countStuff(room)
 
+    ############ Running creeps in expansionRoom
+    if Game.rooms[expansionRoom]:
+        for creep in Game.rooms[expansionRoom].find(FIND_MY_CREEPS):
+            if isSettler(creep):
+                settler.run_settler(creep, expansionRoom)
+            elif creep.memory.role == 'Builder':
+                builder.run_builder(creep, countHarvesterDistribution(Game.rooms[expansionRoom]))
+
     ############ Report to console  - Multiroom safe
-    for room in Object.keys(workerDistribution):
-        roomObj = Game.rooms[room[6:12]]
+    for roomObj in controlledRooms:
+        #roomObj = Game.rooms[room[6:12]]
         print('{}: Energy: {}/{}\t{}/{} Builders\t{} Wall-Es\t{} Harvesters\t{} Creeps'.format(room, roomObj.energyAvailable, roomObj.energyCapacityAvailable, workerDistribution[room]['actualBuilders'],strategyData[room]['desiredBuilders'], workerDistribution[room]['actualWallEs'], workerDistribution[room]['actualHarvesters'], len(creepsInRoom)))
 
 module.exports.loop = main
