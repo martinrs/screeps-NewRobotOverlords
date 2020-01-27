@@ -103,7 +103,7 @@ def main():
                 if strategyData[room]['desiredBuilders'] < 2:
                     strategyData[room]['desiredBuilders'] = 2
 
-            weakwalls = len(room.find(FIND_STRUCTURES).filter(lambda s: (s.structureType==STRUCTURE_WALL and s.hits < wall_e.weakWallLimit)))
+            weakwalls = len(room.find(FIND_STRUCTURES).filter(lambda s: ((s.structureType==STRUCTURE_WALL or s.structureType == STRUCTURE_RAMPART) and s.hits < wall_e.weakWallLimit)))
             if weakwalls > 0:
                 strategyData[room]['desiredWallEs'] = 1
 
@@ -150,7 +150,7 @@ def main():
                 else:
                     harvester.run_harvester(creep, harvesterDistribution, structureDict[room])
 
-            workerDistribution[room] = countStuff(room)
+        workerDistribution[room] = countStuff(room)
 
     ############ Running creeps in expansionRoom
     if Game.rooms[expansionRoom]:
@@ -161,8 +161,7 @@ def main():
                 builder.run_builder(creep, countHarvesterDistribution(Game.rooms[expansionRoom]))
 
     ############ Report to console  - Multiroom safe
-    for roomObj in controlledRooms:
-        #roomObj = Game.rooms[room[6:12]]
-        print('{}: Energy: {}/{}\t{}/{} Builders\t{} Wall-Es\t{} Harvesters\t{} Creeps'.format(room, roomObj.energyAvailable, roomObj.energyCapacityAvailable, workerDistribution[room]['actualBuilders'],strategyData[room]['desiredBuilders'], workerDistribution[room]['actualWallEs'], workerDistribution[room]['actualHarvesters'], len(creepsInRoom)))
+    for room in controlledRooms:
+        print('\n{}: Energy: {}/{}\t{}/{} Builders\t{} Wall-Es\t{} Harvesters\t{} Creeps'.format(room, room.energyAvailable, room.energyCapacityAvailable, workerDistribution[room]['actualBuilders'],strategyData[room]['desiredBuilders'], workerDistribution[room]['actualWallEs'], workerDistribution[room]['actualHarvesters'], len(room.find(FIND_MY_CREEPS))))
 
 module.exports.loop = main
